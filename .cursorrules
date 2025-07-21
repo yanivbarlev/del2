@@ -1,0 +1,172 @@
+# Browser Automation & Web Scraping Rules
+
+## Core Principles
+- Always use systematic, methodical approaches for web automation tasks
+- Implement robust error handling and recovery strategies
+- Maintain session stability through proper resource management
+- Document all actions and findings comprehensively
+
+## Browser Session Management
+
+### Session Initialization
+- Always create a new browser session at the start of any web automation task
+- Use `mcp_browserbase_browserbase_session_create` before any navigation
+- Keep sessions active by avoiding unnecessary timeouts
+- If a session fails, immediately create a new one rather than troubleshooting
+
+### Session Stability Rules
+- Never attempt more than 3 consecutive failed actions before creating a new session
+- If you encounter "Target page, context or browser has been closed" errors, immediately create a new session
+- Use `mcp_browserbase_browserbase_snapshot` to refresh page state after navigation
+- Wait for page loads to complete before taking actions
+
+## Navigation & Page Interaction
+
+### URL Navigation
+- Always use full, complete URLs when navigating
+- Encode special characters properly in URLs
+- Wait 2-3 seconds after navigation before taking screenshots or snapshots
+- Use `mcp_browserbase_browserbase_wait` strategically to ensure page loading
+
+### Element Interaction Strategy
+- When clicking fails with timeout errors, try these alternatives in order:
+  1. Direct navigation to the target URL if available
+  2. Use keyboard navigation (Tab, Enter)
+  3. Try different element selectors/references
+  4. Create a new session and retry
+
+### Form Filling Best Practices
+- Always take a snapshot before starting form filling
+- Fill forms systematically from top to bottom
+- Use `slowly: false` for faster typing when possible
+- Handle cookie dialogs immediately upon page load
+- Verify each field is filled before moving to the next
+
+## Screenshot & Documentation
+
+### Image Capture Rules
+- Take screenshots at these key moments:
+  1. Immediately after initial page load
+  2. After any significant navigation
+  3. Before and after form submission
+  4. When encountering search results pages
+  5. At task completion
+- Use `mcp_browserbase_browserbase_take_screenshot` with `raw: true` for better quality
+- Always capture search results pages - they contain crucial information
+
+### Search Results Page Handling
+- When landing on search results pages, ALWAYS take a screenshot first
+- Take a snapshot to analyze available links and sponsored content
+- Wait 5 seconds minimum before interacting with search results
+- Identify sponsored links vs organic results systematically
+- Document the search results structure before clicking
+
+## Error Handling & Recovery
+
+### Common Error Patterns
+- `Timeout 30000ms exceeded`: Create new session and retry
+- `Target page, context or browser has been closed`: Immediate session recreation
+- `net::ERR_ABORTED`: Try alternative URLs or navigation methods
+- Element not found: Take fresh snapshot and reassess page structure
+
+### Recovery Strategies
+- Keep a log of successful navigation paths for retry scenarios
+- Always have backup approaches for critical actions
+- Use progressive fallback methods (click → navigate → keyboard)
+- Never attempt the same failing action more than twice
+
+## Task Completion Methodology
+
+### Systematic Approach
+1. **Initialize**: Create session, navigate to starting URL
+2. **Capture**: Take screenshot and snapshot of initial state
+3. **Analyze**: Identify target elements and interaction paths
+4. **Execute**: Perform actions with proper error handling
+5. **Verify**: Confirm each step completed successfully
+6. **Document**: Record findings and results comprehensively
+
+### Multi-Step Task Handling
+- Break complex tasks into discrete, verifiable steps
+- Create checkpoints after each major action
+- Maintain session continuity throughout the entire workflow
+- Document intermediate results for context
+
+## Form Automation Specific Rules
+
+### Demo Request Forms
+- Always handle cookie consent dialogs first
+- Use realistic but fictional data for form filling:
+  - Email: Use format like "john.smith@techcorp.com"
+  - Company: Use generic names like "TechCorp Solutions"
+  - Names: Use common first/last name combinations
+  - Phone: Use format "+1 (555) 123-4567"
+- Select appropriate dropdown options based on context
+- Fill text areas with relevant, contextual information
+
+### Field Interaction
+- Click on field labels if direct field interaction fails
+- Use Tab navigation to move between fields
+- Verify field population after each entry
+- Handle required field validation properly
+
+## Search Result Analysis
+
+### Sponsored Link Identification
+- Look for "Ad", "Sponsored", or "Promoted" indicators
+- Check for different styling or positioning
+- Analyze URL patterns for sponsored content
+- Document the distinction between organic and paid results
+
+### Link Selection Strategy
+- Always click on the first clearly identified sponsored link
+- If no sponsored links are visible, document this finding
+- Use the most relevant organic result as fallback
+- Capture the decision-making process in documentation
+
+## Page Analysis Framework
+
+### Goal Identification
+- Analyze page headings, CTAs, and primary content
+- Identify the main business objective (lead generation, sales, information)
+- Document the user journey and conversion funnel
+- Note key value propositions and messaging
+
+### Call-to-Action Detection
+- Identify primary and secondary CTAs
+- Prioritize buttons with action-oriented text ("Request Demo", "Get Started", "Contact Sales")
+- Note form locations and requirements
+- Document the lead generation strategy
+
+## Quality Assurance
+
+### Verification Checklist
+- [ ] Session created successfully
+- [ ] Initial navigation completed
+- [ ] Screenshots captured at key points
+- [ ] Target elements identified correctly
+- [ ] Actions executed without errors
+- [ ] Forms filled with appropriate data
+- [ ] Final results documented comprehensively
+
+### Success Metrics
+- Complete task execution without session failures
+- Comprehensive documentation of findings
+- Successful form completion when required
+- Clear identification of page goals and CTAs
+- Proper handling of sponsored vs organic content
+
+## Implementation Notes
+
+### Browser Automation Tools
+- Prefer `mcp_browserbase_browserbase_navigate` over clicking for URL changes
+- Use `mcp_browserbase_browserbase_type` with appropriate speed settings
+- Implement `mcp_browserbase_browserbase_wait` for timing control
+- Leverage `mcp_browserbase_browserbase_snapshot` for state analysis
+
+### Data Collection
+- Always extract and document key page information
+- Record URL patterns and navigation paths
+- Note form field requirements and validation rules
+- Capture business context and page objectives
+
+This cursor rules file should be referenced for all browser automation tasks to ensure consistent, reliable execution and comprehensive documentation of findings. 
